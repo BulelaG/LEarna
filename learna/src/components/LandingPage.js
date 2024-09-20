@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 import './LandingPage.css'; // Custom styles
 
 function LandingPage() {
@@ -8,16 +8,18 @@ function LandingPage() {
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const accounts = await provider.send("eth_requestAccounts", []);
-        setWalletAddress(accounts[0]);
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+        setWalletAddress(address);
       } catch (err) {
-        console.log("Error connecting to wallet: ", err);
+        console.log('Error connecting to wallet:', err);
       }
     } else {
-      alert("Please install MetaMask!");
+      alert('Please install MetaMask!');
     }
   };
+  
 
   return (
     <div className="landing-page">

@@ -1,0 +1,23 @@
+.landing-page {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .hero {
+    margin: 20px 0;
+  }
+  
+  .course-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+  }
+  
+  .connect-wallet-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
