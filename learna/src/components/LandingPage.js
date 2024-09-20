@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ethers } from 'ethers';
 import './LandingPage.css'; // Custom styles
 
-function LandingPage() {
-  const [walletAddress, setWalletAddress] = useState("");
+const LandingPage = ({ account }) => {
+    const [walletAddress, setWalletAddress] = useState("");
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -22,35 +22,62 @@ function LandingPage() {
   
 
   return (
-    <div className="landing-page">
-      <header>
-        <img src="/logo.png" alt="Logo" className="logo" />
-        <button onClick={connectWallet} className="connect-wallet-btn">
-          {walletAddress ? `Connected: ${walletAddress}` : "Connect Wallet"}
+    <div className="container-fluid p-0">
+      {/* Hero Section */}
+      <div className="jumbotron text-center text-white bg-primary py-5">
+        <h1 className="display-4">Welcome to Web3 Learning Platform</h1>
+        <p className="text-center">Account: {account ? account : 'Not connected'}</p>
+        <p className="lead">Master decentralized applications with our courses</p>
+        <button 
+          className="btn btn-light btn-lg mt-3" 
+          onClick={connectWallet}
+          disabled={!!account}
+        >
+          {account ? 'Wallet Connected' : 'Connect Wallet'}
         </button>
-      </header>
+      </div>
 
-      <section className="hero">
-        <h1>Unlock Your Web3 Future</h1>
-        <p>Learn blockchain, earn tokens, and shape the future!</p>
-      </section>
+      {/* Courses Section */}
+      <div className="container mt-5">
+        <h2 className="text-center mb-4">Our Courses</h2>
 
-      <section className="courses">
-        <div className="course-card">
-          <h3>Blockchain 101</h3>
-          <p>Start your journey into blockchain technology.</p>
+        <div className="row">
+          {/* Course Card 1 */}
+          <div className="col-md-4">
+            <div className="card mb-4 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title">Course 1</h5>
+                <p className="card-text">An introduction to blockchain technology and its applications.</p>
+                <button className="btn btn-primary">View Course</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Course Card 2 */}
+          <div className="col-md-4">
+            <div className="card mb-4 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title">Course 2</h5>
+                <p className="card-text">Learn about Ethereum smart contracts and dApp development.</p>
+                <button className="btn btn-primary">View Course</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Course Card 3 */}
+          <div className="col-md-4">
+            <div className="card mb-4 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title">Course 3</h5>
+                <p className="card-text">Master Solidity and build your first decentralized application.</p>
+                <button className="btn btn-primary">View Course</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="course-card">
-          <h3>Smart Contracts</h3>
-          <p>Learn how to build decentralized applications (dApps).</p>
-        </div>
-        <div className="course-card">
-          <h3>DeFi Mastery</h3>
-          <p>Dive into decentralized finance (DeFi).</p>
-        </div>
-      </section>
+      </div>
     </div>
   );
-}
+};
 
 export default LandingPage;

@@ -47,15 +47,24 @@ const CourseView = ({ courseId }) => {
   useEffect(() => {
     connectWallet();
   }, []);
-
   return (
-    <div>
-      <h2>Course Details</h2>
-      <p>Course description goes here...</p>
-      <button onClick={completeCourse}>Complete Course</button>
-      <p>Connected account: {account ? account : 'Not connected'}</p>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="card shadow">
+            <div className="card-body">
+              <h2 className="card-title">Course Details</h2>
+              <p className="card-text">Description for the course with ID: {courseId} goes here...</p>
+              <button className="btn btn-primary btn-block" onClick={completeCourse}>
+                Complete Course
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
+
 
 export default CourseView;
