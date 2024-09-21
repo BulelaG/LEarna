@@ -61,6 +61,28 @@ const CourseView = ({ courseId }) => {
     }
   };
 
+  // Mint NFT Certificate
+  const mintCertificate = async () => {
+    if (window.ethereum) {
+      try {
+        setLoading(true);
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        const tx = await contract.mintCertificateNFT(courseId); // Call the smart contract function for minting NFT
+        await tx.wait(); // Wait for transaction confirmation
+        alert("Certificate NFT minted successfully!");
+      } catch (error) {
+        console.error("Error minting NFT: ", error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert('Please connect MetaMask');
+    }
+  };
+
   // Connect wallet on component mount
   useEffect(() => {
     connectWallet();
@@ -74,6 +96,11 @@ const CourseView = ({ courseId }) => {
             <div className="card-body">
               <h2 className="card-title text-primary">{courseDetails.title}</h2>
               <p className="card-text">{courseDetails.description}</p>
+
+              {/* Mint Certificate Button */}
+              <button className="btn btn-success btn-block mb-3" onClick={mintCertificate} disabled={loading}>
+                {loading ? 'Minting...' : 'Mint Certificate NFT'}
+              </button>
 
               <h4 className="text-success">Course Details</h4>
               <p><strong>Duration:</strong> {courseDetails.duration}</p>

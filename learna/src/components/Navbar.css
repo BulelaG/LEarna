@@ -1,8 +1,9 @@
 /* Navbar.css */
 
 .logo {
-    height: 80px; /* Adjust this as needed */
-    width: auto;
+    height: 80px;
+     /* Adjust this as needed */
+    width: 80px;
     object-fit: contain;
   }
   
@@ -16,7 +17,7 @@
   }
   
   .navbar-text {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.5rem;
+    font-weight: 600;
   }
   
