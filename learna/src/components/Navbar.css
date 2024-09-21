@@ -1,5 +1,22 @@
-.navbar-brand {
+/* Navbar.css */
+
+.logo {
+    height: 80px; /* Adjust this as needed */
+    width: auto;
+    object-fit: contain;
+  }
+  
+  .navbar-brand span {
+    font-size: 1.8rem; /* Adjust size for branding */
     font-weight: bold;
-    font-size: 1.5rem;
+  }
+  
+  .navbar-nav .nav-link {
+    margin-left: 15px; /* Adds space between links */
+  }
+  
+  .navbar-text {
+    font-size: 1rem;
+    font-weight: 500;
   }
   

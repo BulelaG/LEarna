@@ -4,7 +4,25 @@ import contractABI from '../contractABI.json'; // Ensure ABI is correctly import
 
 const CourseView = ({ courseId }) => {
   const [account, setAccount] = useState(null);
-  const contractAddress = 'YOUR_CONTRACT_ADDRESS_HERE'; // Add your smart contract address here
+  const [loading, setLoading] = useState(false);
+  const contractAddress = '0xYourActualContractAddress'; // Replace with your smart contract address
+
+  // Dummy course data (you can replace this with real data from an API or database)
+  const courseDetails = {
+    title: "Mastering Ethereum Smart Contracts",
+    description: "In this course, you'll learn everything about Ethereum and how to write smart contracts in Solidity.",
+    duration: "6 weeks",
+    prerequisites: "Basic understanding of JavaScript and blockchain concepts.",
+    currentModule: "Introduction to Solidity",
+    upcomingModules: [
+      "Advanced Smart Contracts",
+      "Deploying Contracts to Testnet",
+      "Interacting with DApps",
+      "Building a Frontend for Your DApp",
+      "Security Best Practices in Smart Contracts"
+    ],
+    incentivePrize: "100 Reward Tokens" // Prize for completing the course
+  };
 
   // Connect to wallet and set the user's account
   const connectWallet = async () => {
@@ -13,14 +31,11 @@ const CourseView = ({ courseId }) => {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
         setAccount(await signer.getAddress());
-
-        // You can also initialize the contract here if needed
-        const contract = new ethers.Contract(contractAddress, contractABI, signer);
       } catch (error) {
         console.error("Error connecting to wallet: ", error);
       }
     } else {
-      alert('Please install MetaMask');
+      alert('MetaMask is required to interact with this application. Please install it.');
     }
   };
 
@@ -28,15 +43,18 @@ const CourseView = ({ courseId }) => {
   const completeCourse = async () => {
     if (window.ethereum) {
       try {
+        setLoading(true);
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
         const tx = await contract.completeCourse(courseId); // Call the smart contract function
         await tx.wait(); // Wait for transaction confirmation
-        alert("Course completed! You've been rewarded.");
+        alert(`Course completed! You've been rewarded with ${courseDetails.incentivePrize}.`);
       } catch (error) {
         console.error("Error completing course: ", error);
+      } finally {
+        setLoading(false);
       }
     } else {
       alert('Please connect MetaMask');
@@ -47,16 +65,38 @@ const CourseView = ({ courseId }) => {
   useEffect(() => {
     connectWallet();
   }, []);
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card shadow">
             <div className="card-body">
-              <h2 className="card-title">Course Details</h2>
-              <p className="card-text">Description for the course with ID: {courseId} goes here...</p>
-              <button className="btn btn-primary btn-block" onClick={completeCourse}>
-                Complete Course
+              <h2 className="card-title text-primary">{courseDetails.title}</h2>
+              <p className="card-text">{courseDetails.description}</p>
+
+              <h4 className="text-success">Course Details</h4>
+              <p><strong>Duration:</strong> {courseDetails.duration}</p>
+              <p><strong>Prerequisites:</strong> {courseDetails.prerequisites}</p>
+
+              <h4 className="text-info">Current Module: {courseDetails.currentModule}</h4>
+              <p>You're currently learning about: {courseDetails.currentModule}</p>
+              
+              <h5 className="text-warning">Upcoming Modules</h5>
+              <ul className="list-group mb-4">
+                {courseDetails.upcomingModules.map((module, index) => (
+                  <li key={index} className="list-group-item list-group-item-light">
+                    {module}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Incentive Prize Section */}
+              <h4 className="text-danger">Incentive Prize</h4>
+              <p className="font-weight-bold">{courseDetails.incentivePrize}</p>
+
+              <button className="btn btn-primary btn-block" onClick={completeCourse} disabled={loading}>
+                {loading ? 'Processing...' : 'Complete Course'}
               </button>
             </div>
           </div>
@@ -65,6 +105,5 @@ const CourseView = ({ courseId }) => {
     </div>
   );
 };
-
 
 export default CourseView;
