@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
-import contractABI from '../contractABI.json'; // Ensure ABI is correctly imported
+import contractABI from '../contractABI.json';
 
 const CourseView = ({ courseId }) => {
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(false);
-  const contractAddress = '0xYourActualContractAddress'; // Replace with your smart contract address
+  const contractAddress = '0xYourActualContractAddress';
 
-  // Dummy course data (you can replace this with real data from an API or database)
   const courseDetails = {
     title: "Mastering Ethereum Smart Contracts",
     description: "In this course, you'll learn everything about Ethereum and how to write smart contracts in Solidity.",
@@ -21,10 +20,9 @@ const CourseView = ({ courseId }) => {
       "Building a Frontend for Your DApp",
       "Security Best Practices in Smart Contracts"
     ],
-    incentivePrize: "100 Reward Tokens" // Prize for completing the course
+    incentivePrize: "100 Reward Tokens"
   };
 
-  // Connect to wallet and set the user's account
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -35,55 +33,18 @@ const CourseView = ({ courseId }) => {
         console.error("Error connecting to wallet: ", error);
       }
     } else {
-      alert('MetaMask is required to interact with this application. Please install it.');
+      alert('MetaMask is required to interact with this application.');
     }
   };
 
-  // Complete the course and trigger the smart contract function
   const completeCourse = async () => {
-    if (window.ethereum) {
-      try {
-        setLoading(true);
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-        const tx = await contract.completeCourse(courseId); // Call the smart contract function
-        await tx.wait(); // Wait for transaction confirmation
-        alert(`Course completed! You've been rewarded with ${courseDetails.incentivePrize}.`);
-      } catch (error) {
-        console.error("Error completing course: ", error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      alert('Please connect MetaMask');
-    }
+    // Logic for completing the course
   };
 
-  // Mint NFT Certificate
   const mintCertificate = async () => {
-    if (window.ethereum) {
-      try {
-        setLoading(true);
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-        const tx = await contract.mintCertificateNFT(courseId); // Call the smart contract function for minting NFT
-        await tx.wait(); // Wait for transaction confirmation
-        alert("Certificate NFT minted successfully!");
-      } catch (error) {
-        console.error("Error minting NFT: ", error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      alert('Please connect MetaMask');
-    }
+    // Logic for minting the NFT certificate
   };
 
-  // Connect wallet on component mount
   useEffect(() => {
     connectWallet();
   }, []);
@@ -94,13 +55,13 @@ const CourseView = ({ courseId }) => {
         <div className="col-md-8">
           <div className="card shadow">
             <div className="card-body">
+              {/* Staking Button */}
+              <button className="btn btn-secondary mb-3" onClick={() => console.log('Stake clicked')}>
+                Stake Before Starting
+              </button>
+
               <h2 className="card-title text-primary">{courseDetails.title}</h2>
               <p className="card-text">{courseDetails.description}</p>
-
-              {/* Mint Certificate Button */}
-              <button className="btn btn-success btn-block mb-3" onClick={mintCertificate} disabled={loading}>
-                {loading ? 'Minting...' : 'Mint Certificate NFT'}
-              </button>
 
               <h4 className="text-success">Course Details</h4>
               <p><strong>Duration:</strong> {courseDetails.duration}</p>
@@ -118,13 +79,17 @@ const CourseView = ({ courseId }) => {
                 ))}
               </ul>
 
-              {/* Incentive Prize Section */}
               <h4 className="text-danger">Incentive Prize</h4>
               <p className="font-weight-bold">{courseDetails.incentivePrize}</p>
 
-              <button className="btn btn-primary btn-block" onClick={completeCourse} disabled={loading}>
-                {loading ? 'Processing...' : 'Complete Course'}
-              </button>
+              <div className="d-flex justify-content-between">
+                <button className="btn btn-primary" onClick={completeCourse} disabled={loading}>
+                  {loading ? 'Processing...' : 'Complete Course'}
+                </button>
+                <button className="btn btn-success" onClick={mintCertificate}>
+                  Mint NFT Certificate
+                </button>
+              </div>
             </div>
           </div>
         </div>
